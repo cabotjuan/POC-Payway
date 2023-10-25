@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./index.css" rel="stylesheet" />
+    <title></title>
+  </head>
+  <body>
+    <form action="" id="formulario">
+      <fieldset>
+        <label for="card_number" class="input-label">Numero de tarjeta:</label>
+        <input
+          class="input"
+          type="text"
+          data-decidir="card_number"
+          placeholder="XXXXXXXXXXXXXXXX"
+          value="4507990000004905"
+          class="input"
+        />
+        <label for="security_code" class="input-label"
+          >Codigo de seguridad:</label
+        >
+        <input
+          class="input"
+          type="text"
+          data-decidir="security_code"
+          placeholder="XXX"
+          value="123"
+        />
+        <label for="card_expiration_month" class="input-label"
+          >Mes de vencimiento:</label
+        >
+        <input
+          class="input"
+          type="text"
+          data-decidir="card_expiration_month"
+          placeholder="MM"
+          value="12"
+        />
+        <label for="card_expiration_year" class="input-label"
+          >Año de vencimiento:</label
+        >
+        <input
+          class="input"
+          type="text"
+          data-decidir="card_expiration_year"
+          placeholder="AA"
+          value="20"
+        />
+        <label for="card_holder_name" class="input-label"
+          >Nombre del titular:</label
+        >
+        <input
+          class="input"
+          type="text"
+          data-decidir="card_holder_name"
+          placeholder="TITULAR"
+          value="TITULAR"
+        />
+        <label for="card_holder_doc_type" class="input-label"
+          >Tipo de documento:</label
+        >
+        <select data-decidir="card_holder_doc_type" class="input">
+          <option value="dni">DNI</option>
+        </select>
+        <label for="card_holder_doc_type" class="input-label"
+          >Numero de documento:</label
+        >
+        <input
+          class="input"
+          type="text"
+          data-decidir="card_holder_doc_number"
+          placeholder="XXXXXXXXXX"
+          value="27859328"
+        />
+        <input type="submit" value="Generar Token" class="submit-btn" />
+      </fieldset>
+    </form>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"
+    ></script>
+    <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+    <script type="text/javascript">
+      const publicApiKey = "e9cdb99fff374b5f91da4480c8dca741";
+      const urlSandbox = "https://developers.decidir.com/api/v2";
+      const decidir = new Decidir(urlSandbox);
+      decidir.setPublishableKey(publicApiKey);
+      decidir.setTimeout(5000);
+
+      const form = document.querySelector("#formulario");
+      form.addEventListener("submit", sendForm);
+
+      function sdkResponseHandler(status, response) {
+        if (window.ReactNativeWebView) {
+          const message = { status, response };
+          window.ReactNativeWebView.postMessage(JSON.stringify(message));
+        }
+      }
+
+      function sendForm(event) {
+        event.preventDefault();
+        console.log("SEND FORM...");
+        console.log("Decidir: ", decidir);
+        decidir.createToken(form, sdkResponseHandler);
+        return false;
+      }
+    </script>
+  </body>
+</html>
